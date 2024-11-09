@@ -3,7 +3,7 @@ let userSymbol;
 let cpuSymbol;
 let gameMode;
 
-// Variables de score
+
 let userScore = 0;
 let cpuScore = 0;
 let player1Score = 0;
@@ -30,7 +30,7 @@ function startGame(mode) {
     document.querySelector('.game-menu').style.display = 'none';
     document.querySelector('.game-start').style.display = 'flex';
 
- // Définir les symboles en fonction du choix de l'utilisateur
+
 if (selectedSymbol === 'X') {
     document.getElementById('YOU-symbol').innerText = 'X (YOU)';
     document.getElementById('CPU-symbol').innerText = 'O (CPU)';
@@ -45,7 +45,7 @@ if (selectedSymbol === 'X') {
     document.getElementById('player2-symbol').innerText = 'O (P2)';
    
 
-    document.querySelector('.your-score').style.backgroundColor = "#F2B137";  // Couleur pour O
+    document.querySelector('.your-score').style.backgroundColor = "#F2B137"; 
     document.querySelector('.cpu-score').style.backgroundColor = "#31C3BD"; 
 
 }
@@ -106,30 +106,30 @@ clickInTurn.forEach(item => {
 });
 
 function addTurn(e) {
-    if (e.target.firstChild) return; // Empêche de jouer sur une case déjà occupée
+    if (e.target.firstChild) return; 
 
     const turnDisplay = document.createElement('div');
     turnDisplay.classList.add(turn === 'X' ? 'cross' : 'circle');
     e.target.appendChild(turnDisplay);
     e.target.removeEventListener('click', addTurn);
 
-    if (checkScore()) return; // Arrête le jeu si un gagnant est trouvé
+    if (checkScore()) return; 
 
     turn = turn === "X" ? "O" : "X";
     updateTurnDisplay();
 
-    // Si le mode est CPU et c'est au tour du CPU, il joue automatiquement
+    
     if (gameMode === 'cpu' && turn === cpuSymbol) {
-        setTimeout(cpuPlay, 800);  // Délai pour simuler un temps de réflexion du CPU
+        setTimeout(cpuPlay, 800);  
     }
 }
 
 function cpuPlay() {
     const emptySquares = Array.from(document.querySelectorAll('.grid-item')).filter(square => !square.firstChild);
 
-    if (emptySquares.length === 0) return; // Aucun coup possible si la grille est pleine
+    if (emptySquares.length === 0) return; 
 
-    // Choisir une case vide au hasard
+   
     const randomSquare = emptySquares[Math.floor(Math.random() * emptySquares.length)];
     
     const cpuMove = document.createElement('div');
@@ -137,7 +137,7 @@ function cpuPlay() {
     randomSquare.appendChild(cpuMove);
     randomSquare.removeEventListener('click', addTurn);
 
-    if (checkScore()) return; // Arrête le jeu si le CPU gagne
+    if (checkScore()) return; 
 
     turn = turn === "X" ? "O" : "X";
     updateTurnDisplay();
@@ -159,7 +159,7 @@ function checkScore() {
             const winnerName = winnerSymbol === userSymbol ? "YOU" : "CPU";
 
            combo.forEach(index => {
-                // Applique la couleur de fond et le box-shadow corrects
+               
                 if (winnerSymbol === 'X') {
                     allSquares[index].style.backgroundColor = '#31C3BD';
                     allSquares[index].style.boxShadow = 'inset 0 -8px 0 0 rgb(49, 195, 189)';
@@ -174,27 +174,27 @@ function checkScore() {
             });
 
             showVictoryOverlay(winnerName, winnerSymbol);
-            return true;  // Jeu terminé, un gagnant a été trouvé
+            return true;  
         }
     }
 
-    // Vérification de match nul
+   
     const isDraw = Array.from(allSquares).every(square => square.firstChild);
     if (isDraw) {
         showVictoryOverlay("DRAW");
-        return true; // Jeu terminé, match nul
+        return true; 
     }
     
-    return false;  // Aucun gagnant pour l'instant
+    return false;  
 }
 
 
-// Sélection du bouton restart présent dès le chargement de la page
+
 const restartBtn = document.querySelector('.restart');
 
-// Gestionnaire d'événement pour le bouton restart
+
 restartBtn.addEventListener("click", () => {
-    showVictoryOverlay(null, null, true);  // Appel avec isRestart = true pour afficher l'option de redémarrage
+    showVictoryOverlay(null, null, true);  
 });
 
 function showVictoryOverlay(winner, winningSymbol = null, isRestart = false) {
@@ -213,22 +213,22 @@ function showVictoryOverlay(winner, winningSymbol = null, isRestart = false) {
 
 
 
- // Cas où on clique sur le bouton restart
+ 
     if (isRestart) {
         contentTitle.innerText = "RESTART GAME?";
         contentTitle.style.color = "#A8BFC9";
     } else {
-        // Cas normal de victoire ou d'égalité
+       
         if (winner === "DRAW") {
             contentTitle.innerText = "ROUND TIED";
             contentTitle.style.color = "#A8BFC9";
-            tiesScore++; // Incrémente le score d'égalité
+            tiesScore++; 
         } else {
             playerWins.innerText = winner === "YOU" ? 'YOU WON!' : 'OH NO YOU LOST...';
             contentTitle.innerText = `${winningSymbol} TAKES THE ROUND`;
             contentTitle.style.color = winningSymbol === "X" ? "#31C3BD" : "#F2B137";
             
-            // Met à jour le score en fonction du mode et du gagnant
+          
             if (gameMode === 'cpu') {
                 if (winner === "YOU") {
                     userScore++;
@@ -244,7 +244,7 @@ function showVictoryOverlay(winner, winningSymbol = null, isRestart = false) {
             }
         }
 
-        updateScoreDisplay();  // Met à jour l'affichage des scores
+        updateScoreDisplay(); 
         playerWins.classList.add("player-wins");
     }
 
@@ -274,16 +274,16 @@ function showVictoryOverlay(winner, winningSymbol = null, isRestart = false) {
         }
     })
 
-    // Création des boutons "No, Cancel" et "Yes, Restart"
+  
     const cancelBtn = document.createElement('button');
     cancelBtn.classList.add("cancel-btn");
     cancelBtn.innerText = "NO, CANCEL";
-    cancelBtn.addEventListener("click", () => overlay.remove());  // Ferme la bannière sans action
+    cancelBtn.addEventListener("click", () => overlay.remove());  
 
     const restartGameBtn = document.createElement('button');
     restartGameBtn.classList.add("restart-game-btn");
     restartGameBtn.innerText = "YES, RESTART";
-    restartGameBtn.addEventListener("click", () => location.reload()); //
+    restartGameBtn.addEventListener("click", () => location.reload()); 
        
 
 
@@ -293,7 +293,7 @@ function showVictoryOverlay(winner, winningSymbol = null, isRestart = false) {
         resetBoard();
     });
 
-        // Ajouter les boutons au conteneur en fonction de isRestart
+    
     if (isRestart) {
         contentBtn.appendChild(cancelBtn);
         contentBtn.appendChild(restartGameBtn);
@@ -314,7 +314,7 @@ function showVictoryOverlay(winner, winningSymbol = null, isRestart = false) {
 
 
 
-// Met à jour l'affichage des scores
+
 function updateScoreDisplay() {
     document.getElementById('score-YOU').innerText = userScore;
     document.getElementById('score-CPU').innerText = cpuScore;
@@ -342,4 +342,4 @@ function resetBoard() {
 }
 
 updateTurnDisplay();
-updateScoreDisplay();  // Initialise l'affichage des scores au chargement
+updateScoreDisplay();  
